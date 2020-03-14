@@ -5,16 +5,10 @@ public class Sentence {
     Argument[] args;
 
     public Sentence(Argument... args){
-        if(args.length < 1)
-            throw new IllegalArgumentException("index must be greater or equal at 1 !");
-
         this.args = args;
     }
 
     public Sentence(ArgumentType... args){
-        if(args.length < 1)
-            throw new IllegalArgumentException("index must be greater or equal at 1 !");
-
         this.args = new Argument[args.length];
         int i = 0;
         for(ArgumentType argType : args)
