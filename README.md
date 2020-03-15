@@ -1,5 +1,5 @@
 # UniversalCommandManager
-Made By MAKAPUSH#9414 with the strong help of Haskell Shitposter, MinusKube, Akami and Hokayado  
+Made By MAKAPUSH#9414 with the strong help of Haskell Shitposter, MinusKube, Akami and Hokkaydo  
 
 ## How to download the Library ?  
 Just go into [releases section](https://github.com/Maxalus/UniversalCommandManager/releases)  
