@@ -8,18 +8,18 @@ import com.makapush.api.ucm.util.DefaultDefaultEventHandler;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UCMimpl<E> extends UniversalCommandManager<E> {
 
 
-    private List<CommandListener<E>> commands;
+    private Map<String, CommandListener<E>> commands;
     private HashMap<Object, String> prefixes = new HashMap<>();
-    private String defaultPrefix;
 
     private Argument expectedArg;
 
-    UCMimpl(String defaultPrefix, List<CommandListener<E>> commands){
-        this.defaultPrefix = defaultPrefix;
+    UCMimpl(String defaultPrefix, Map<String, CommandListener<E>> commands){
+        super.defaultPrefix = defaultPrefix;
         this.commands = commands;
         setDefaultEventHandler(new DefaultDefaultEventHandler<>());
     }
@@ -29,10 +29,13 @@ public class UCMimpl<E> extends UniversalCommandManager<E> {
         String serverPrefix = getCustomPrefix(prefixIdentifier);
         if(message.startsWith(serverPrefix)){
 
-            for (CommandListener<E> command : commands){
+            String commandKey = message.split(" ")[0].replaceFirst(serverPrefix, "");
+            System.out.println(commandKey);
+            if(commands.containsKey(commandKey)){
+                CommandListener<E> command = commands.get(commandKey);
+                Argument[] args = getUserArguments(message, serverPrefix, command.getCommand());
 
                 if(message.startsWith(serverPrefix + command.getCommand())){
-                    Argument[] args = getUserArguments(message, serverPrefix, command.getCommand());
 
                     if(message.startsWith(serverPrefix + command.getCommand() + " help")){
                         command.commandHelp(event, this);
@@ -45,13 +48,11 @@ public class UCMimpl<E> extends UniversalCommandManager<E> {
                         } else {
                             command.onWrongArguments(args, event, this);
                         }
-                        return;
 
                     } else {
                         command.onConstraintInvalid(args, event, this);
-                        System.out.println("Constraint Invalidddddd d! dd !d d !!dd !!");
-                        return;
                     }
+                    return;
 
                 }
 
@@ -92,12 +93,13 @@ public class UCMimpl<E> extends UniversalCommandManager<E> {
         return arguments;
     }
 
-    public List<CommandListener<E>> getCommands() {
+    public Map<String, CommandListener<E>> getCommands() {
         return commands;
     }
 
 
     private boolean isArgumentsValid(Argument[] userArg, List<Sentence> commandSentences){
+        if(commandSentences.isEmpty()) return true;
         Sentence userSentence = new Sentence(userArg);
         for (Sentence commandSentence : commandSentences){
             if(userSentence.equals(commandSentence)) return true;

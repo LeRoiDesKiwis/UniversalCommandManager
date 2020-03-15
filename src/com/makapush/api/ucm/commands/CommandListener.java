@@ -13,12 +13,11 @@ public abstract class CommandListener<E> {
 
     private String command;
     private Predicate<E> constraint;
-    List<Sentence> sentences;
+    List<Sentence> sentences = new ArrayList<>();
 
     public CommandListener(String command, Predicate<E> constraint){
         this.command = command;
         this.constraint = constraint;
-        this.sentences = new ArrayList<Sentence>();
     }
     public CommandListener(String command, Sentence[] sentences){
         this.command = command;
